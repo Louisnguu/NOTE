@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Note App</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/dexie@latest/dist/dexie.min.js"></script>
+</head>    
+
+<body style="background-color: #767676;">
+
+    <div class="container">
+        <div class="addButtonContainer">
+            <button onclick="openForm()">Add Note</button>
+        </div>
+
+        <div class="noteContainer"></div>
+    </div>
+
+    <div class="addNote">
+        <div class="closeButton">
+            <i class="fas fa-window-close"></i>
+        </div>
+
+        <div>
+            <span>Title</span>
+            <input type="text" id="noteTitle" name="title">
+        </div>
+    
+        <div>
+            <span>Body</span>
+            <textarea id="noteBody" name="body"></textarea>
+        </div>
+    
+        <div>
+            <span>Type</span>
+            <select name="type" id="noteType">
+                <option value="Home" selected="true">Home</option>
+                <option value="Personal">Personal</option>
+                <option value="Business">Business</option>
+            </select>
+        </div>
+    
+        <div>
+            <span>Time</span>
+            <select name="time" id="noteTime">
+                <option value="day">Mỗi ngày</option>
+                <option value="week">Mỗi tuần</option>
+                <option value="month">Mỗi tháng</option>
+                <option value="year">Mỗi năm</option>
+            </select>
+        </div>
+    
+        <div>
+            <span>Date & Time</span>
+            <input type="datetime-local" id="noteDateTime" name="datetime">
+        </div>
+    
+        <div>
+            <button type="button" onclick="createNote()">Add</button>
+       </div>
+
+    </div>
+
+    <div class="note noteDetailView">
+        <div class="buttonContainer">
+            <div class="noteType"></div>
+            <div class="iconContainer closeDetailView">
+                <i class="fas fa-window-close"></i>
+            </div>
+        </div>
+
+        <div class="title"></div>
+        <div class="bodyText detailView"></div>
+        <div class="date"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+
+</body>
+</html>
