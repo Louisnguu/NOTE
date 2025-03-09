@@ -3,3 +3,4 @@ mysql-connector-python
 flask-cors
 pygame
 gunicorn
+psycopg2
