@@ -4,7 +4,3 @@ flask-cors
 pygame
 gunicorn
 psycopg2
-datetime
-threading
-time
-os
