@@ -8,6 +8,8 @@ import pygame
 import tkinter as tk
 from tkinter import Label
 import os
+import psycopg2
+
 app = Flask(__name__, static_folder="static")
 CORS(app)
 
