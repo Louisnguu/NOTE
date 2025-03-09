@@ -7,6 +7,7 @@ import time
 import pygame
 import os
 import psycopg2
+import atexit  # Thêm vào đầu file
 
 app = Flask(__name__, static_folder="static")
 CORS(app)
@@ -22,6 +23,10 @@ def get_db_connection():
         port=os.getenv("DB_PORT", "3307"),
         database=os.getenv("DB_NAME", "luu_tru_ghi_chu")
     )
+
+def stop_reminder_thread():
+    global reminder_running
+    reminder_running = False
 
 @app.route("/")
 def home():
@@ -71,12 +76,13 @@ def save_note():
 
 # Hàm kiểm tra và nhắc nhở ghi chú
 reminder_running = False  # Thêm biến kiểm soát
+atexit.register(stop_reminder_thread)
 def remind():
     global notified_notes, reminder_running
-    if reminder_running:  # Kiểm tra nếu luồng đã chạy
-        return  
-    reminder_running = True  # Đánh dấu là đang chạy
-    while True:
+    if reminder_running:
+        return
+    reminder_running = True
+    while reminder_running:  # Đảm bảo thread sẽ dừng khi `reminder_running` = False
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
@@ -87,11 +93,10 @@ def remind():
             notes = cursor.fetchall()
 
             for title, content in notes:
-                note_key = f"{title}-{now}"  # Ghi chú với thời gian chính xác đến phút
+                note_key = f"{title}-{now}"
                 if note_key not in notified_notes:
-                    notified_notes.add(note_key)  # Đánh dấu trước khi gọi popup
-                    print(f"🔔 Nhắc nhở: {title} - {content}")  
-                    # Trả về dữ liệu thông báo đến trình duyệt
+                    notified_notes.add(note_key)
+                    print(f"🔔 Nhắc nhở: {title} - {content}")
                     show_popup(title, content)
 
             cursor.close()
@@ -99,7 +104,7 @@ def remind():
         except mysql.connector.Error as err:
             print("Lỗi MySQL:", err)
 
-        time.sleep(1)  # Kiểm tra lại sau mỗi 1 giây
+        time.sleep(60)  # Thay vì 1 giây, bạn có thể tăng lên 60 giây để giảm tải cơ sở dữ liệu
 
 # Hàm hiển thị popup trong trình duyệt
 def show_popup(title, content):
