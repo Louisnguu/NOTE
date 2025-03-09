@@ -8,20 +8,24 @@ import pygame
 import os
 import psycopg2
 import atexit  # Thêm vào đầu file
+from dotenv import load_dotenv
 
 app = Flask(__name__, static_folder="static")
 CORS(app)
+
+# Nạp các biến môi trường từ file .env
+load_dotenv()
 
 # Lưu ghi chú đã nhắc nhở
 notified_notes = set()
 
 def get_db_connection():
     return mysql.connector.connect(
-        host=os.getenv("DB_HOST", "127.0.0.1"),
-        user=os.getenv("DB_USER", "root"),
-        password=os.getenv("DB_PASS", "usbw"),
-        port=os.getenv("DB_PORT", "3307"),
-        database=os.getenv("DB_NAME", "luu_tru_ghi_chu")
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASS"),
+        port=os.getenv("DB_PORT"),
+        database=os.getenv("DB_NAME")
     )
 
 def stop_reminder_thread():
