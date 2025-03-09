@@ -5,7 +5,6 @@ pygame
 gunicorn
 psycopg2
 datetime
-tkinter
 threading
 time
 os
